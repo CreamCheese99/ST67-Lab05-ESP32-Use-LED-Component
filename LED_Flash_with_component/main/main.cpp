@@ -1,6 +1,6 @@
 
 
-//*************ไฟวิ่งดววงเดียว */
+//***********ไฟวิ่งสองดวงสวนกันตรงกลาง*************/
 #include <stdio.h>
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
@@ -19,19 +19,24 @@ LED leds[] = {led1, led2, led3, led4, led5, led6, led7, led8};
 
 extern "C" void app_main(void)
 {
-    int i = 0; // Start from the first LED
+    int leftIndex = 0;      // Starting index for the left LED
+    int rightIndex = 7;     // Starting index for the right LED
+
     while(1)
     {        
-        // Turn ON the current LED
-        leds[i].ON();
+        // Turn ON the current left and right LEDs
+        leds[leftIndex].ON();
+        leds[rightIndex].ON();
         
         // Delay for a while
         vTaskDelay(200 / portTICK_PERIOD_MS);
         
-        // Turn OFF the current LED
-        leds[i].OFF();
+        // Turn OFF the current left and right LEDs
+        leds[leftIndex].OFF();
+        leds[rightIndex].OFF();
         
-        // Move to the next LED
-        i = (i + 1) % 8; // Loop back to the first LED after the last one
+        // Move to the next LEDs (left moves to the right, right moves to the left)
+        leftIndex = (leftIndex + 1) % 4;  // Move left index towards the center
+        rightIndex = (rightIndex - 1 + 8) % 8; // Move right index towards the center
     }
 }
